@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #007bff;
+            text-align: center;
+        }
+        form {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        input[type=text], input[type=number], textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 6px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .log {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Fitness Tracker</h1>
+
+        <!-- Log Workout Form -->
+        <h2>Log Workout</h2>
+        <form id="logForm" onsubmit="logWorkout(event)">
+            <label for="exercise">Exercise:</label><br>
+            <input type="text" id="exercise" required><br><br>
+
+            <label for="duration">Duration (minutes):</label><br>
+            <input type="number" id="duration" required><br><br>
+
+            <label for="calories">Calories Burned:</label><br>
+            <input type="number" id="calories" required><br><br>
+
+            <button type="submit">Log Workout</button>
+        </form>
+
+        <!-- Set Goal Form -->
+        <h2>Set Goal</h2>
+        <form id="goalForm" onsubmit="setGoal(event)">
+            <label for="goalExercise">Exercise Goal:</label><br>
+            <input type="text" id="goalExercise" required><br><br>
+
+            <label for="goalDuration">Duration Goal (minutes):</label><br>
+            <input type="number" id="goalDuration" required><br><br>
+
+            <button type="submit">Set Goal</button>
+        </form>
+
+        <!-- Logged Workouts and Goals -->
+        <h2>Logged Data</h2>
+        <div id="logContainer">
+            <!-- Logged data will be dynamically added here -->
+        </div>
+
+        <!-- Progress Tracking (Example) -->
+        <h2>Progress Tracking</h2>
+        <div id="progress">
+            <!-- Progress information will be displayed here -->
+            <p>No goals set yet.</p>
+        </div>
+    </div>
+
+    <script>
+        // Array to store logged workouts and goals (for demo purposes)
+        let workouts = [];
+        let goals = [];
+
+        function logWorkout(event) {
+            event.preventDefault();
+
+            const exercise = document.getElementById('exercise').value;
+            const duration = document.getElementById('duration').value;
+            const calories = document.getElementById('calories').value;
+
+            const workout = {
+                exercise: exercise,
+                duration: duration,
+                calories: calories
+            };
+
+            workouts.push(workout);
+            displayLog();
+            resetForm('logForm');
+        }
+
+        function setGoal(event) {
+            event.preventDefault();
+
+            const goalExercise = document.getElementById('goalExercise').value;
+            const goalDuration = document.getElementById('goalDuration').value;
+
+            const goal = {
+                exercise: goalExercise,
+                duration: goalDuration
+            };
+
+            goals.push(goal);
+            displayProgress();
+            resetForm('goalForm');
+        }
+
+        function displayLog() {
+            const logContainer = document.getElementById('logContainer');
+            logContainer.innerHTML = '';
+
+            workouts.forEach(workout => {
+                const logDiv = document.createElement('div');
+                logDiv.classList.add('log');
+                logDiv.innerHTML = `
+                    <p><strong>Exercise:</strong> ${workout.exercise}</p>
+                    <p><strong>Duration:</strong> ${workout.duration} minutes</p>
+                    <p><strong>Calories Burned:</strong> ${workout.calories}</p>
+                `;
+                logContainer.appendChild(logDiv);
+            });
+        }
+
+        function displayProgress() {
+            const progressDiv = document.getElementById('progress');
+            progressDiv.innerHTML = '';
+
+            if (goals.length === 0) {
+                progressDiv.innerHTML = '<p>No goals set yet.</p>';
+                return;
+            }
+
+            goals.forEach(goal => {
+                const progressInfo = document.createElement('div');
+                progressInfo.classList.add('log');
+                progressInfo.innerHTML = `
+                    <p><strong>Exercise Goal:</strong> ${goal.exercise}</p>
+                    <p><strong>Duration Goal:</strong> ${goal.duration} minutes</p>
+                `;
+                progressDiv.appendChild(progressInfo);
+            });
+        }
+
+        function resetForm(formId) {
+            document.getElementById(formId).reset();
+        }
+
+        // Initial display of logged data and progress
+        displayLog();
+        displayProgress();
+    </script>
+</body>
+</html>

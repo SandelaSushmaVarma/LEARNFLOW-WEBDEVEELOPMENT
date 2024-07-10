@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Learning Platform</title>
+    <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #007bff;
+            text-align: center;
+        }
+        form {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        input[type=text], textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin: 6px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .course {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .course h3 {
+            margin-top: 0;
+            color: #007bff;
+        }
+        .course p {
+            margin: 6px 0;
+        }
+        .progress-container {
+            margin-top: 20px;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .progress {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Online Learning Platform</h1>
+
+        <!-- Course Creation Form -->
+        <h2>Create a New Course</h2>
+        <form id="courseForm" onsubmit="createCourse(event)">
+            <label for="courseTitle">Course Title:</label><br>
+            <input type="text" id="courseTitle" required><br><br>
+
+            <label for="instructor">Instructor:</label><br>
+            <input type="text" id="instructor" required><br><br>
+
+            <label for="description">Description:</label><br>
+            <textarea id="description" rows="4" required></textarea><br><br>
+
+            <button type="submit">Create Course</button>
+        </form>
+
+        <!-- Course List -->
+        <h2>Available Courses</h2>
+        <div id="courseList">
+            <!-- Courses will be dynamically added here -->
+        </div>
+
+        <!-- Enrollment Form -->
+        <h2>Enroll in a Course</h2>
+        <form id="enrollForm" onsubmit="enrollCourse(event)">
+            <label for="courseSelect">Select Course:</label><br>
+            <select id="courseSelect" required>
+                <option value="" disabled selected>Select a course</option>
+            </select><br><br>
+
+            <label for="studentName">Your Name:</label><br>
+            <input type="text" id="studentName" required><br><br>
+
+            <button type="submit">Enroll</button>
+        </form>
+
+        <!-- Progress Tracking (Example) -->
+        <div class="progress-container">
+            <h2>My Courses and Progress</h2>
+            <div id="progress">
+                <!-- Progress information will be displayed here -->
+                <p>No courses enrolled yet.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Array to store course data (for demo purposes)
+        let courses = [];
+
+        function createCourse(event) {
+            event.preventDefault();
+
+            const courseTitle = document.getElementById('courseTitle').value;
+            const instructor = document.getElementById('instructor').value;
+            const description = document.getElementById('description').value;
+
+            const course = {
+                title: courseTitle,
+                instructor: instructor,
+                description: description,
+                students: []
+            };
+
+            courses.push(course);
+            displayCourses();
+            resetForm('courseForm');
+        }
+
+        function enrollCourse(event) {
+            event.preventDefault();
+
+            const courseIndex = document.getElementById('courseSelect').value;
+            const studentName = document.getElementById('studentName').value;
+
+            if (courseIndex !== "") {
+                courses[courseIndex].students.push(studentName);
+                displayProgress();
+                resetForm('enrollForm');
+            }
+        }
+
+        function displayCourses() {
+            const courseListDiv = document.getElementById('courseList');
+            courseListDiv.innerHTML = '';
+
+            courses.forEach((course, index) => {
+                const courseDiv = document.createElement('div');
+                courseDiv.classList.add('course');
+                courseDiv.innerHTML = `
+                    <h3>${course.title}</h3>
+                    <p><strong>Instructor:</strong> ${course.instructor}</p>
+                    <p>${course.description}</p>
+                    <p><strong>Students enrolled:</strong> ${course.students.length}</p>
+                    <button onclick="enrollForm.querySelector('select').value = ${index}">Enroll</button>
+                `;
+                courseListDiv.appendChild(courseDiv);
+            });
+
+            updateEnrollSelect();
+        }
+
+        function updateEnrollSelect() {
+            const selectElement = document.getElementById('courseSelect');
+            selectElement.innerHTML = '<option value="" disabled selected>Select a course</option>';
+
+            courses.forEach((course, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = course.title;
+                selectElement.appendChild(option);
+            });
+        }
+
+        function displayProgress() {
+            const progressDiv = document.getElementById('progress');
+            progressDiv.innerHTML = '';
+
+            if (courses.length === 0) {
+                progressDiv.innerHTML = '<p>No courses enrolled yet.</p>';
+                return;
+            }
+
+            courses.forEach(course => {
+                if (course.students.length > 0) {
+                    const courseProgress = document.createElement('div');
+                    courseProgress.classList.add('progress');
+                    courseProgress.innerHTML = `
+                        <h3>${course.title}</h3>
+                        <p><strong>Instructor:</strong> ${course.instructor}</p>
+                        <p><strong>Students enrolled:</strong> ${course.students.length}</p>
+                        <p><strong>Progress:</strong> ${Math.floor(Math.random() * 100)}%</p>
+                    `;
+                    progressDiv.appendChild(courseProgress);
+                }
+            });
+        }
+
+        function resetForm(formId) {
+            document.getElementById(formId).reset();
+        }
+
+        // Initial display of courses
+        displayCourses();
+    </script>
+</body>
+</html>

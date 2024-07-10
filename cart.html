@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file for styling -->
+</head>
+<body>
+    <header>
+        <h1>Shopping Cart</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="cart.html">Cart</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section id="cart-items">
+            <h2>Your Cart</h2>
+            <!-- Display items added to the cart here -->
+            <div class="cart-item">
+                <img src="product1.jpg" alt="Product 1">
+                <h3>Product 1</h3>
+                <p>$XX.XX</p>
+                <button onclick="removeFromCart(1)">Remove</button>
+            </div>
+            <!-- Repeat for other cart items -->
+        </section>
+        
+        <section id="cart-total">
+            <h3>Total: $XX.XX</h3>
+            <button onclick="checkout()">Checkout</button>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2024 Your Online Store. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script> <!-- Link to your JavaScript file -->
+</body>
+</html>

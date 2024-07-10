@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        #weather-container {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        input[type=text] {
+            padding: 10px;
+            width: 200px;
+            margin-right: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Weather App</h1>
+
+    <label for="city">Enter City:</label>
+    <input type="text" id="city" placeholder="Enter city name">
+    <button onclick="getWeather()">Get Weather</button>
+
+    <div id="weather-container">
+        <!-- Weather data will be displayed here -->
+    </div>
+
+    <script>
+        function getWeather() {
+            const city = document.getElementById('city').value;
+            const apiKey = 'YOUR_API_KEY'; // Replace with your API key
+            const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const weatherContainer = document.getElementById('weather-container');
+                    weatherContainer.innerHTML = ''; // Clear previous results
+
+                    const cityName = document.createElement('h2');
+                    cityName.textContent = data.name;
+
+                    const weatherDescription = document.createElement('p');
+                    weatherDescription.textContent = `Weather: ${data.weather[0].main}, ${data.weather[0].description}`;
+
+                    const temperature = document.createElement('p');
+                    temperature.textContent = `Temperature: ${data.main.temp} °C`;
+
+                    const humidity = document.createElement('p');
+                    humidity.textContent = `Humidity: ${data.main.humidity}%`;
+
+                    weatherContainer.appendChild(cityName);
+                    weatherContainer.appendChild(weatherDescription);
+                    weatherContainer.appendChild(temperature);
+                    weatherContainer.appendChild(humidity);
+                })
+                .catch(error => {
+                    console.log('Error fetching weather data:', error);
+                    alert('Failed to fetch weather data. Please try again.');
+                });
+        }
+    </script>
+</body>
+</html>
